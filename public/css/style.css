@@ -125,3 +125,34 @@ nav a {
     border-radius: 10px;
     border: 1px solid #94C973;
 }
+
+.access-point h2 {
+    text-align: center;
+    color: #0A7029;
+    font-family: Poppins-Regular;
+}
+
+.access-point input {
+    margin-bottom: 20px;
+    border-radius: 5px;
+    border: 1px solid #94C973;
+    font-size: 18px;
+}
+
+.access-point input[type="submit"] {
+    background-color: #76B947;
+    border: 1px solid #76B947;
+    color: #fff;
+    letter-spacing: 2px;
+    font-size: 18px;
+}
+
+.access-point a {
+    text-decoration: none;
+    color: #76B947;
+    font-family: Poppins-Bold;
+}
+
+.access-point a:hover {
+    border-bottom: 2px solid #76B947;
+}
