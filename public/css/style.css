@@ -45,9 +45,83 @@ nav li {
     margin-left: 10px;
 }
 
+nav li:hover {
+    border-bottom: 2px solid #0A7029;
+}
+
+nav a {
+    text-decoration: none;
+    color: #0A7029;
+    font-size: 18px;
+}
+
 #homepage {
     background-image: url(/images/vetg.jpg);
     background-position: center;
     background-size: cover;
     height: 100vh;
+}
+
+#homepage h2 {
+    text-align: center;
+    padding-top: 220px;
+    font-size: 50px;
+    color: #0A7029;
+}
+
+#homepage p {
+    text-align: center;
+    padding-top: 35px;
+    font-size: 27px;
+    font-family: Poppins-Regular;
+    color: #0A7029;
+}
+
+.schedule-a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 50px;
+}
+
+.home-btn {
+    display: block;
+    width: 200px;
+    height: 37px;
+    background-color: #DBE8D8;
+    padding: 5px;
+    text-align: center;
+    border-radius: 5px;
+    border: 1px solid #DBE8D8;
+    font-family: Poppins-Light;
+}
+
+.schedule-a a {
+    text-decoration: none;
+    font-size: 20px;
+    color: #0A7029;
+}
+
+.schedule-a a:hover{
+    color: #fff;
+    background-color: #94C973;
+    border: 1px solid #94C973;
+}
+
+.access-point {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #E7F2F8;
+}
+
+.access-point form {
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #94C973;
 }
