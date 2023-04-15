@@ -1,0 +1,53 @@
+@font-face {
+    font-family: Poppins-Bold;
+    src: url(Poppins-Bold.ttf);
+}
+
+@font-face {
+    font-family: Poppins-Light;
+    src: url(Poppins-Light.ttf);
+}
+
+@font-face {
+    font-family: Poppins-Regular;
+    src: url(Poppins-Regular.ttf);
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: Poppins-Regular;
+}
+
+.container {
+    padding-left: 150px;
+    padding-right: 150px;
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    margin-bottom: 10px;
+    background-color: #DBE8D8;
+}
+
+header h1 a {
+    text-decoration: none;
+    color: #0A7029;
+    font-family: Poppins-Bold;
+}
+
+nav li {
+    display: inline;
+    margin-left: 10px;
+}
+
+#homepage {
+    background-image: url(/images/vetg.jpg);
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+}
