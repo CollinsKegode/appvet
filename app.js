@@ -36,11 +36,43 @@ app.get('/', (req, res) => {
 
 // Route to login page
 app.get('/login', (req, res) => {
+    const client = {
+        email: '',
+        password: ''
+    }
     res.render('login')
+})
+
+// Handling user login
+app.post('/login', (req, res) => {
+    const client = {
+        email: req.body.email,
+        password: req.body.password
+    }
 })
 
 // Route to signup page
 app.get('/signup', (req, res) => {
+    const client = {
+        clientname: req.body.clientname,
+        email: req.body.email,
+        password: req.body.password,
+        confirmPassword: req.body.confirmPassword
+
+    }
+
+    res.render('signup')
+})
+
+// Handling user signup
+app.post('/signup', (req, res) => {
+    const client = {
+        clientname: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+    }
+
     res.render('signup')
 })
 
