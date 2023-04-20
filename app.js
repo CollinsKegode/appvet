@@ -29,6 +29,15 @@ app.use(express.urlencoded({extended: false}))
 // serving public file
 app.use(express.static('public'))
 
+// Set up middleware to check if user is logged in
+app.use((req, res, next) => {
+    if (req.session.userID) {
+        next()
+    } else {
+        res.redirect('/login')
+    }
+})
+
 // Route to homepage
 app.get('/', (req, res) => {
     res.render('index')
@@ -39,6 +48,16 @@ app.get('/login', (req, res) => {
     const client = {
         email: '',
         password: ''
+
+        // // Check if user credentials are valid
+        // if (isValidUser)(email,password) {
+        //     // set session variable to indicate user is logged in
+        //     req.session.userID = getUserIdByEmail(email)
+
+        //     res.redirect('/dashboard')
+        // } else {
+        //     res.render('index')
+        // }
     }
     res.render('login')
 })
@@ -75,8 +94,6 @@ app.post('/signup', (req, res) => {
 
     res.render('signup')
 })
-
-
 
 
 app.listen(5000, () => {
