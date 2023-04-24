@@ -31,11 +31,17 @@ app.use(express.static('public'))
 
 // Set up middleware to check if user is logged in
 app.use((req, res, next) => {
-    if (req.session.userID) {
-        next()
+    if (req.session.userID === undefined) {
+        res.locals.isLoggedIn = false
+        res.locals.clientname = 'Guest'
+        console.log("You're not logged in. UserId is " + req.session.userID);
     } else {
-        res.redirect('/login')
+        res.locals.isLoggedIn = true
+        res.locals.userID = req.session.userID
+        res.locals.clientname = req.session.clientname.toString().split(' ')[0]
+        console.log("You're logged in. UserId is " + req.session.userID);
     }
+    next()
 })
 
 // Route to homepage
@@ -45,7 +51,7 @@ app.get('/', (req, res) => {
 
 // Route to login page
 app.get('/login', (req, res) => {
-    const client = {
+    const user = {
         email: '',
         password: ''
 
@@ -64,15 +70,31 @@ app.get('/login', (req, res) => {
 
 // Handling user login
 app.post('/login', (req, res) => {
-    const client = {
+    const user = {
         email: req.body.email,
         password: req.body.password
     }
+
+    // Check if user exists
+    // let sql 
 })
 
 // Route to signup page
 app.get('/signup', (req, res) => {
-    const client = {
+    const user = {
+        clientname: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+
+    }
+
+    res.render('signup', {user})
+})
+
+// Handling user signup
+app.post('/signup', (req, res) => {
+    const user = {
         clientname: req.body.clientname,
         email: req.body.email,
         password: req.body.password,
@@ -80,19 +102,39 @@ app.get('/signup', (req, res) => {
 
     }
 
-    res.render('signup')
-})
-
-// Handling user signup
-app.post('/signup', (req, res) => {
-    const client = {
-        clientname: '',
-        email: '',
-        password: '',
-        confirmPassword: ''
+    if (client.password === client.confirmPassword) {
+        // Check if client exists
+        let sql = 'SELECT * FROM clients WHERE email = ?'
+        connection.query(
+            sql,
+            [user.email],
+            (error, results) => {
+                if (results.length > 0) {
+                    // check if user exists
+                    let error = true
+                    message = 'Account already exists with the email provided.'
+                    res.render('signup', {user, error, message})
+                } else {
+                    //  Hash password and create user
+                    let sql = 'INSERT INTO clients (clientname, email, password) VALUES(?,?,?)'
+                    connection.query(
+                        sql,
+                        [user.clientname, user.email],
+                        (error, result) => {
+                            res.redirect('/login') 
+                        }
+                    )
+                }
+            }
+        )
+    } else {
+        // password do not match
+        let error = true
+        message = 'Password Mismarch!'
+        res.render('signup', {user, error, message})
     }
 
-    res.render('signup')
+    
 })
 
 
