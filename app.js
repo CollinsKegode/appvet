@@ -102,7 +102,7 @@ app.post('/signup', (req, res) => {
 
     }
 
-    if (client.password === client.confirmPassword) {
+    if (user.password === user.confirmPassword) {
         // Check if client exists
         let sql = 'SELECT * FROM clients WHERE email = ?'
         connection.query(
