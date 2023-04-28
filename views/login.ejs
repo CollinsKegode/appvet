@@ -2,13 +2,13 @@
 
 <main class="access-point">
 
-    <form action="">
+    <form action="/login" method="post">
         <h2>Key in your details to <br> continue</h2>
 
         <label for="">Email</label>
-        <input type="email">
+        <input type="email" name="email" id="" value="<%= user.email %>" required>
         <label for="">Password</label>
-        <input type="password">
+        <input type="password"  name="email" id="" value="<%= user.password %>" minlength="8" required>
         <input type="submit" value="Login" required>
         <p>Don't have an account? <a href="/signup">Sign Up</a></p>
     </form>
