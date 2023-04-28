@@ -54,18 +54,9 @@ app.get('/login', (req, res) => {
     const user = {
         email: '',
         password: ''
-
-        // // Check if user credentials are valid
-        // if (isValidUser)(email,password) {
-        //     // set session variable to indicate user is logged in
-        //     req.session.userID = getUserIdByEmail(email)
-
-        //     res.redirect('/dashboard')
-        // } else {
-        //     res.render('index')
-        // }
     }
-    res.render('login')
+    res.render('login', {user, error: false, message: ' '})
+    
 })
 
 // Handling user login
@@ -74,9 +65,36 @@ app.post('/login', (req, res) => {
         email: req.body.email,
         password: req.body.password
     }
+    // check if user exists
+    let sql = 'SELECT * FROM clients WHERE email = ?'
+    connection.query(
+        sql,
+        [ user.email ],
+        (error, results) => {
+            if (results > 0) {
+                if (isEqual) {
+                    // grand access
+                    req.session.userID = results[0].c_id
+                    req.session.clientname = results[0].clientname
 
-    // Check if user exists
-    // let sql 
+                    console.log('User is successfully logged in');
+                    res.redirect('/')
+
+                } else {
+                    // incorect password stored in the db
+                    let error = true
+                    message = 'Incorect message'
+                    res.render('login', { user, error, message, })
+                }
+            } else {
+                // user does not exist 
+                let error = true
+                let message = 'Account does not exist'
+                res.render('login', {user, error, message})
+            }
+        }
+    )
+    
 })
 
 // Route to signup page
@@ -88,8 +106,7 @@ app.get('/signup', (req, res) => {
         confirmPassword: ''
 
     }
-
-    res.render('signup', {user})
+    res.render('signup', {user, error: false, message: ' '})
 })
 
 // Handling user signup
@@ -99,7 +116,6 @@ app.post('/signup', (req, res) => {
         email: req.body.email,
         password: req.body.password,
         confirmPassword: req.body.confirmPassword
-
     }
 
     if (user.password === user.confirmPassword) {
@@ -112,11 +128,11 @@ app.post('/signup', (req, res) => {
                 if (results.length > 0) {
                     // check if user exists
                     let error = true
-                    message = 'Account already exists with the email provided.'
+                    let message = 'Account already exists with the email provided.'
                     res.render('signup', {user, error, message})
                 } else {
-                    //  Hash password and create user
-                    let sql = 'INSERT INTO clients (clientname, email, password) VALUES(?,?,?)'
+                    //  create user
+                    let sql = 'INSERT INTO clients (clientname, email, password) VALUES (?,?,?)'
                     connection.query(
                         sql,
                         [user.clientname, user.email],
@@ -133,7 +149,6 @@ app.post('/signup', (req, res) => {
         message = 'Password Mismarch!'
         res.render('signup', {user, error, message})
     }
-
     
 })
 
