@@ -6,6 +6,10 @@
 
         <h2>Set up account</h2>
 
+        <% if (error) {%> 
+            <p class="error"><%= message %></p>
+        <% } %>    
+
         <label for="">Full name</label>
         <input type="text" name="fullname" id="" value="<%= user.clientname %>" required>
         <label for="">Email</label>
