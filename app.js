@@ -10,7 +10,7 @@ const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'appovet'
+    database: 'app'
 })
 
 // add the express-session
@@ -100,10 +100,10 @@ app.post('/login', (req, res) => {
 // Route to signup page
 app.get('/signup', (req, res) => {
     const user = {
-        clientname: '',
+        full_name: '',
         email: '',
         password: '',
-        confirmPassword: ''
+        confirm_password: ''
 
     }
     res.render('signup', {user, error: false, message: ' '})
@@ -112,13 +112,13 @@ app.get('/signup', (req, res) => {
 // Handling user signup
 app.post('/signup', (req, res) => {
     const user = {
-        clientname: req.body.clientname,
+        full_name: req.body.full_name,
         email: req.body.email,
         password: req.body.password,
-        confirmPassword: req.body.confirmPassword
+        confirm_password: req.body.confirm_password
     }
 
-    if (user.password === user.confirmPassword) {
+    if (user.password === user.confirm_password) {
         // Check if client exists
         let sql = 'SELECT * FROM clients WHERE email = ?'
         connection.query(
@@ -132,10 +132,10 @@ app.post('/signup', (req, res) => {
                     res.render('signup', {user, error, message})
                 } else {
                     //  create user
-                    let sql = 'INSERT INTO clients (clientname, email, password) VALUES (?,?,?)'
+                    let sql = 'INSERT INTO clients (full_name, email, password) VALUES (?,?,?)'
                     connection.query(
                         sql,
-                        [user.clientname, user.email],
+                        [user.full_name, user.email],
                         (error, result) => {
                             res.redirect('/login') 
                         }
@@ -146,7 +146,7 @@ app.post('/signup', (req, res) => {
     } else {
         // password do not match
         let error = true
-        message = 'Password Mismarch!'
+        let message = 'Password Mismarch!'
         res.render('signup', {user, error, message})
     }
     
