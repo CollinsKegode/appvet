@@ -11,13 +11,13 @@
         <% } %>    
 
         <label for="">Full name</label>
-        <input type="text" name="fullname" id="" value="<%= user.clientname %>" required>
+        <input type="text" name="full_name" id="" value="<%= user.full_name %>" required>
         <label for="">Email</label>
         <input type="email" name="email" id="" value="<%= user.email %>" required>
         <label for="">Password</label>
         <input type="password" name="password" id="" value="<%= user.password %>" required minlength="8">
         <label for="">Confirm Password</label>
-        <input type="password" name="confirmPassword" id="" value="<%= user.confirmPassword %>" required minlength="8">
+        <input type="password" name="confirm_password" id="" value="<%= user.confirm_password %>" required minlength="8">
         <input type="submit" value="Signup">
         <p>Have an account already? <a href="/login">Log In</a></p>
     </form>
