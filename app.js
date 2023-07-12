@@ -71,21 +71,26 @@ app.post('/login', (req, res) => {
         sql,
         [ user.email ],
         (error, results) => {
-            if (results > 0) {
-                if (isEqual) {
-                    // grand access
-                    req.session.userID = results[0].client_id
-                    req.session.username = results[0].username
+            if (results.length > 0) {
 
-                    console.log('User is successfully logged in');
-                    res.redirect('/')
-
-                } else {
-                    // incorect password stored in the db
-                    let error = true
-                    message = 'Incorect password'
-                    res.render('login', { user, error, message, })
-                }
+                // compare the submitted password with hash password in the db
+                bcrypt.compare(user.password, results[0].password, (error, isEqual) => {
+                    if (isEqual) {
+                        // grand access
+                        req.session.userID = results[0].client_id
+                        req.session.username = results[0].username
+    
+                        console.log('User is successfully logged in');
+                        res.redirect('/')
+    
+                    } else {
+                        // incorect password stored in the db
+                        let error = true
+                        message = 'Incorect password'
+                        res.render('login', { user, error, message, })
+                    }
+                })
+                
             } else {
                 // user does not exist 
                 let error = true
@@ -131,15 +136,17 @@ app.post('/signup', (req, res) => {
                     let message = 'Account already exists with the email provided.'
                     res.render('signup', {user, error, message})
                 } else {
-                    //  create user
-                    let sql = 'INSERT INTO clients (username, email, password) VALUES (?,?,?)'
-                    connection.query(
+                    //  hash and create user
+                    bcrypt.hash(user.password, 10, (error, hash) => {
+                        let sql = 'INSERT INTO clients (username, email, password) VALUES (?,?,?)'
+                        connection.query(
                         sql,
-                        [user.username, user.email, user.password],
+                        [user.username, user.email, hash],
                         (error, result) => {
                             res.redirect('/login') 
                         }
-                    )
+                    )    
+                    })
                 }
             }
         )
