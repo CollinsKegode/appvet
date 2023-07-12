@@ -10,7 +10,7 @@ const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'app'
+    database: 'appv'
 })
 
 // add the express-session
@@ -33,12 +33,12 @@ app.use(express.static('public'))
 app.use((req, res, next) => {
     if (req.session.userID === undefined) {
         res.locals.isLoggedIn = false
-        res.locals.clientname = 'Guest'
+        res.locals.username = 'Guest'
         console.log("You're not logged in. UserId is " + req.session.userID);
     } else {
         res.locals.isLoggedIn = true
         res.locals.userID = req.session.userID
-        res.locals.clientname = req.session.clientname.toString().split(' ')[0]
+        res.locals.username = req.session.username.toString().split(' ')[0]
         console.log("You're logged in. UserId is " + req.session.userID);
     }
     next()
@@ -74,8 +74,8 @@ app.post('/login', (req, res) => {
             if (results > 0) {
                 if (isEqual) {
                     // grand access
-                    req.session.userID = results[0].c_id
-                    req.session.clientname = results[0].clientname
+                    req.session.userID = results[0].client_id
+                    req.session.username = results[0].username
 
                     console.log('User is successfully logged in');
                     res.redirect('/')
@@ -83,7 +83,7 @@ app.post('/login', (req, res) => {
                 } else {
                     // incorect password stored in the db
                     let error = true
-                    message = 'Incorect message'
+                    message = 'Incorect password'
                     res.render('login', { user, error, message, })
                 }
             } else {
@@ -100,7 +100,7 @@ app.post('/login', (req, res) => {
 // Route to signup page
 app.get('/signup', (req, res) => {
     const user = {
-        full_name: '',
+        username: '',
         email: '',
         password: '',
         confirm_password: ''
@@ -112,7 +112,7 @@ app.get('/signup', (req, res) => {
 // Handling user signup
 app.post('/signup', (req, res) => {
     const user = {
-        full_name: req.body.full_name,
+        username: req.body.username,
         email: req.body.email,
         password: req.body.password,
         confirm_password: req.body.confirm_password
@@ -132,10 +132,10 @@ app.post('/signup', (req, res) => {
                     res.render('signup', {user, error, message})
                 } else {
                     //  create user
-                    let sql = 'INSERT INTO clients (full_name, email, password) VALUES (?,?,?)'
+                    let sql = 'INSERT INTO clients (username, email, password) VALUES (?,?,?)'
                     connection.query(
                         sql,
-                        [user.full_name, user.email],
+                        [user.username, user.email, user.password],
                         (error, result) => {
                             res.redirect('/login') 
                         }
