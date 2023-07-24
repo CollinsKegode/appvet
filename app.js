@@ -61,18 +61,25 @@ app.get('/login', (req, res) => {
 
 // Handling user login
 app.post('/login', (req, res) => {
-    const user = {
+    
+    const user  = {
         email: req.body.email,
         password: req.body.password
-    }
+    } 
+    
     // check if user exists
     let sql = 'SELECT * FROM clients WHERE email = ?'
     connection.query(
         sql,
-        [ user.email ],
+        [user.email],
         (error, results) => {
+            if(error) {
+                let error = true
+                let message = 'Internal server error. Contact Admin.'
+                res.render('login', {user, error, message})
+            }
+            
             if (results.length > 0) {
-
                 // compare the submitted password with hash password in the db
                 bcrypt.compare(user.password, results[0].password, (error, isEqual) => {
                     if (isEqual) {
@@ -84,23 +91,22 @@ app.post('/login', (req, res) => {
                         res.redirect('/')
     
                     } else {
-                        // incorect password stored in the db
+                        // Wrong password stored in the db
                         let error = true
-                        message = 'Incorect password'
-                        res.render('login', { user, error, message, })
+                        let message = 'Wrong Password.'
+                        res.render('login', { user, error, message})
                     }
                 })
                 
             } else {
                 // user does not exist 
                 let error = true
-                let message = 'Account does not exist'
+                let message = 'Email not registered. Check Email or Sign Up.'
                 res.render('login', {user, error, message})
             }
         }
     )
-    
-})
+})       
 
 // Route to signup page
 app.get('/signup', (req, res) => {
@@ -131,6 +137,7 @@ app.post('/signup', (req, res) => {
             [user.email],
             (error, results) => {
                 if (results.length > 0) {
+                    console.log(results);
                     // check if user exists
                     let error = true
                     let message = 'Account already exists with the email provided.'
