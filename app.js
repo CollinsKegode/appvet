@@ -166,6 +166,29 @@ app.post('/signup', (req, res) => {
     
 })
 
+// logout route
+app.get('/logout', (req, res) => {
+    req.session.destroy(() => {
+        res.redirect('/')
+    })
+}) 
+
+
+// Account
+app.get('/account/:id', (req,res) => {
+    if (res.locals.isLoggedIn) {
+        let sql = 'SELECT * FROM clients WHERE client_id = ?'
+        connection.query(
+            sql,
+            [req.params.id],
+            (error, results) => {
+                res.render('account', {user: results[0], userID: req.session.userID, error: false})
+            }
+        )
+    } else {
+        res.redirect('/login')
+    }
+})
 
 app.listen(5000, () => {
     console.log('app is running...');
