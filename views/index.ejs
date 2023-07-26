@@ -1,13 +1,21 @@
 <%- include('partials/header') %>
 
-    <div id="homepage">
+    <% if(locals.isLoggedIn) { %>
         <%- include('partials/nav') %>
+        <main class="container">
+            <h2>Welcome to your dashboard, <%= locals.username %></h2>
+        </main>
 
-        <h2>Avoid hassles and Delays.</h2>
-        <p>Schedule online appointment with a qualified vet Doc on <em><b>appovet</b></em></p>
-        <div class="schedule-a">
-            <a class="home-btn" href="/login">Schedule a visit</a>
+    <% } else { %>  
+
+        <div id="homepage">
+            <h2>Avoid hassles and Delays.</h2>
+            <p>Schedule online appointment with a qualified vet Doc on <em><b>appovet</b></em></p>
+            <div class="schedule-a">
+                <a class="home-btn" href="/login">Schedule a visit</a>
+            </div>
         </div>
-    </div>
+    <% } %>    
+ 
 
 <%- include('partials/footer') %>
