@@ -1,6 +1,72 @@
 <%- include('partials/header') %>
     <%- include('partials/nav') %>
 
-    <h1>Welcome to your dashboard, user</h1>
+    
+
+    <form id="appointmentForm">
+        <label for="">Pet Name</label>
+        <input type="text" id="petName" required>
+
+        <label for="">Owner Name</label>
+        <input type="text" id="ownerName" required>
+
+        <label for="">Appointment Date</label>
+        <input type="date" id="appointmentDate" required>
+
+        <label for="">Appoinrment Time</label>
+        <input type="time" id="appointmentTime" required>
+
+        <button type="submit">Schedule Appointment</button>
+    </form>
+
+    <div id="appointmentList">
+
+    </div>
+
+    <script>
+        let appointmentForm = document.querySelector('#appointmentForm')
+        let appointmentList = document.querySelector('#appointmentList')
+
+        appointmentForm.addEventListener('submit', (e) => {
+
+            const petName = document.querySelector('#petName').value
+            const ownerName = document.querySelector('#ownerName').value
+            const appointmentDate = document.querySelector('#appointnmentDate').value
+            const appointmentTime = document.querySelector('#appintmentTime').value
+
+            const appointment = {
+                petName,
+                ownerName,
+                appointmentDate,
+                appointmentTime
+            }
+
+            displayAppointment(appointment)
+            clearForm()
+        })
+
+        function displayAppointment(appointment) {
+            const appointmentItem = document.createElement('div')
+            appointmentItem.classList.add('appoinrment-item')
+
+            appointmentItem.innerHTML = `
+                <h3>${appointment.petName}</h3>
+                <p><strong></strong>${appointment.ownerName}</p>
+                <p><strong></strong>${appointment.appointmentDate}</p>
+                <p><strong></strong>${appointment.appointmentTime}</p>
+            `  
+            appointmentList.appendChild(appointmentItem)
+        }
+
+        function clearForm() {
+            document.querySelector('#petName')
+            document.querySelector('#ownerName')
+            document.querySelector('#appointmentDate')
+            document.querySelector('#appointmentTime')
+        }
+
+        
+    </script>
+    
 
 <%- include('partials/footer') %>
