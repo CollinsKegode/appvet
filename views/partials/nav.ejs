@@ -2,8 +2,16 @@
     <h1><a href="/"><em>appo</em>vet</a></h1>
     <nav>
         <ul>
-            <li><a href="/signup">Signup</a></li>
-            <li><a href="/login">Login</a></li>
+            <% if (locals.isLoggedIn) { %>
+                <li><a href="/dashboard">Dashboard</a></li>
+                <li><a href="/account/<%= locals.userID %>">Account</a></li>
+                <li><a href="/appointments">My appointments</a></li>
+                <li><a href="/logout">Logout</a></li>
+
+            <% } else { %>
+                <li><a href="/signup">Signup</a></li>
+                <li><a href="/login">Login</a></li>
+            <% } %>    
         </ul>
     </nav>
 </header>
