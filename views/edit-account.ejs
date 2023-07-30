@@ -1,0 +1,44 @@
+<%- include('partials/header') %>
+    <%- include('partials/nav') %>
+
+    <main class="container">
+        <div id="account">
+            <div id="form">
+                <form action="/edit-account/<%= user.client_id %>" method="post" enctype="multipart/form-data">
+                    <label for="">Full Name</label>
+                    <input type="text" name="fullname" id="" value="<%= user.username %>">
+                    <label for="">Email Address</label>
+                    <input type="email" name="email" id="" value="<%= user.email %>">
+                    <label for="">Phone number</label>
+                    <input type="text" name="phonenumber" value="<%= user.phonenumber %>">
+                    <label for="">Gender</label>
+                    <select name="gender" id="">
+                        <% if(user.gender !== null) { %>
+                            <option value="<%= user.gender %>"><%= user.gender %></option>
+                        <% } %>
+                        <option>-- Choose Gender --</option>
+                        <option value="Male">Male</option>
+                        <option value="Female">Female</option>
+                    </select>
+                    <label for="">Location</label>
+                    <input type="text" name="location" id="" value="<%= user.location %>">
+                    <label for="">Profile Picture</label>
+                    <input type="file" name="picture" id="">
+                    <label for="">Password</label>
+                    <input type="password" name="password" id="" value="<%= password %>">
+                    <% if(error) { %>
+                        <small style="color: brown;">Incorect password</small>
+                     <% } %>   
+                    <div>
+                        <!-- <button class="btn" id="btn-cancel">Cancel</button> -->
+                        <a href="/account/<%= user.client_id %>" class="btn" id="btn-cancel">Back</a>
+                        <input class="btn" type="submit" value="Update">
+                    </div> 
+                </form>
+            </div>
+     
+        </div>
+    </main>
+
+    
+<%- include('partials/footer') %>
