@@ -2,6 +2,7 @@ import express from "express";
 import mysql from "mysql";
 import session from "express-session";
 import bcrypt from "bcrypt";
+import multer from "multer"
 
 // create expressjs app
 const app = express()
@@ -12,6 +13,8 @@ const connection = mysql.createConnection({
     password: '',
     database: 'appv'
 })
+
+const upload = multer({dest: 'public/images/profile_pictures'})
 
 // add the express-session
 app.use(session({
@@ -188,6 +191,83 @@ app.get('/account/:id', (req,res) => {
     } else {
         res.redirect('/login')
     }
+})
+
+// Get edit account form
+app.get('/edit-account', (req, res) => {
+    if (res.locals.isLoggedIn) {
+        let sql = 'SELECT * FROM clients WHERE client_id = ?'
+        connection.query(
+            sql,
+            [req.session.userID],
+            (error, results) => {
+                res.render('edit-account', {user: results[0], error: false, password: false})
+            }
+        )
+    } else {
+        res.redirect('/login')
+    }
+})
+
+// edit account
+app.post('/edit-account/:id', upload.single('picture'), (req, res) => {
+    let sql = 'SELECT password FROM clients WHERE client_id = ?'
+    connection.query(
+        sql,
+        [req.params.id],
+        (error, results) => {
+            bcrypt.compare(req.body.password, results[0].password, (error, isEqual) => {
+                console.log(isEqual);
+                if (isEqual) {
+                    if (req.file) {
+                        let sql= 'UPDATE clients SET username = ?, email = ?, phonenumber = ?, gender = ?, location = ?, picture = ? WHERE client_id = ?'
+                        connection.query(
+                            sql,
+                            [
+                                req.body.fullname,
+                                req.body.email,
+                                req.body.phonenumber,
+                                req.body.gender,
+                                req.body.location,
+                                req.file.filename,
+                                Number(req.params.id)
+                            ],
+                            (error, results) => {
+                                res.redirect(`/account/${req.params.id}`)
+                            }
+                        )
+
+                    } else {
+                        let sql = 'UPDATE clients SET username = ?, email = ?, phonenumber = ?, gender = ?, location = ? WHERE client_id = ?'
+                        connection.query(
+                            sql,
+                            [
+                                req.body.fullname,
+                                req.body.email,
+                                req.body.phonenumber,
+                                req.body.gender,
+                                req.body.location,
+                                Number(req.params.id)
+                            ],
+                            (error, results) => {
+                                res.redirect(`/account/${req.params.id}`)
+                            }
+                        )
+                    }
+                } else {
+                    const user = {
+                        client_id: req.session.userID,
+                        username: req.body.fullname,
+                        email: req.body.email,
+                        phonenumber: req.body.phonenumber,
+                        gender: req.body.gender,
+                        location: req.body.location
+                    }  
+                    res.render('edit-account', {user: user, error: true, password: req.body.id} )
+                } 
+            })
+        }
+    )
 })
 
 app.listen(5000, () => {
