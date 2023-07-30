@@ -4,15 +4,16 @@
     <main class="container">
         <div id="account">
             <div class="avatar">
-                <img src="" alt="">
+                <img src="/images.profile_pictures/<%= user.picture %>" alt="">
             </div>
-            <%- user.name %>
-            <%- user.gender %>
-            <%- user.location %>
+            <h3><%= user.username %></h3>
+            <p><%= user.gender %></p>
+            <p><%= user.location %></p>
 
             <% if (user.client_id === userID) { %>
-                <div id="form">
-                    <form action="">
+                <a href="/edit-account" id="btn-edit">Edit Account</a>
+                <!-- <div id="form">
+                    <form action="/edit-account/<%= user.client_id %>" method="post" enctype="multipart/form-data">
                         <label for="">Full Name</label>
                         <input type="text" name="fullname" id="" value="">
                         <label for="">Email Address</label>
@@ -20,7 +21,10 @@
                         <label for="">Phone number</label>
                         <input type="text" name="phonenumber" value="">
                         <label for="">Gender</label>
-                        <select name="" id="">
+                        <select name="gender" id="">
+                            <% if(user.gender !== null) { %>
+                                <option value="<%= user.gender %>"><%= user.gender %></option>
+                            <% } %>
                             <option>-- Choose Gender --</option>
                             <option value="Male">Male</option>
                             <option value="Female">Female</option>
@@ -36,11 +40,27 @@
                             <input class="btn" type="submit" value="update">
                         </div> 
                     </form>
-                </div>
+                </div> -->
 
             <% } %>    
         </div>
     </main>
+
+    <!-- <script>
+        let editBtn = document.querySelector('#btn-edit')
+        let cancelBtn = document.querySelector('#btn-cancel')
+        let form = document.querySelector('#form')
+
+        editBtn.addEventListener('click', (e) => {
+            e.preventDefault()
+            form.style.display = 'block'
+        })
+
+        cancelBtn.addEventListener('click', (e) => {
+            e.preventDefault()
+            form.style.display = 'none'
+        })
+    </script> -->
 
 
 <%- include('partials/footer') %>
