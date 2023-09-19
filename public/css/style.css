@@ -208,3 +208,29 @@ nav a {
     color: #0A7029;
     background-color: whitesmoke;
 }
+
+#form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#form h1 {
+    font-family: poppins-Bold;
+    color: #0A7029;
+}
+
+#appointmentForm {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #94C973;
+    border-radius: 10px;
+    padding: 10px;
+    width: 800px;
+}
+
+#appointmentForm label{
+    font-size: 15px;
+    margin-top: 10px;
+}
