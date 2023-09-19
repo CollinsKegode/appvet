@@ -176,6 +176,53 @@ app.get('/logout', (req, res) => {
     })
 }) 
 
+// Dahsboard
+app.get('/dashboard', (req, res) => {
+    if (res.locals.isLoggedIn) {
+        let sql = 'SELECT * FROM clients WHERE client_id = ?'
+        connection.query(
+            sql,
+            [req.session.userID],
+            (error, results) => {
+                res.render('dashboard', {user: results[0], userID: req.session.userID, error: false})
+            }
+        )
+    } else {
+        res.redirect('/login')
+    }
+})
+
+// Post dashboard form
+app.post('/dashboard', (req, res) => {
+
+    const user = {
+        username: req.body.username,
+        email: req.body.email,
+    }
+    if (res.locals.isLoggedIn) {
+        let sql = 'INSERT INTO apppointments (appointment_date, appointment_time, pet_name, reason_for_visit) VALUES (?,?,?)'
+        connection.query(
+            sql,
+            [user.username, user.email],
+            (error, results) => {
+                res.redirect('/dashboard')
+            }
+        )
+    } else {
+        let sql = 'SELECT * FROM clients WHERE email =?'
+        connection.query(
+            sql,
+            [user.email],
+            (error, results) => {
+                if (results > 0) {
+                    
+                } else {
+                    
+                }
+            }
+        )
+    }
+})
 
 // Account
 app.get('/account/:id', (req,res) => {
@@ -217,8 +264,9 @@ app.post('/edit-account/:id', upload.single('picture'), (req, res) => {
         [req.params.id],
         (error, results) => {
             bcrypt.compare(req.body.password, results[0].password, (error, isEqual) => {
-                console.log(isEqual);
+                
                 if (isEqual) {
+                    
                     if (req.file) {
                         let sql= 'UPDATE clients SET username = ?, email = ?, phonenumber = ?, gender = ?, location = ?, picture = ? WHERE client_id = ?'
                         connection.query(
