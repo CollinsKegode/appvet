@@ -12,14 +12,14 @@
 
             <% if (user.client_id === userID) { %>
                 <a href="/edit-account" id="btn-edit">Edit Account</a>
-                <!-- <div id="form">
-                    <form action="/edit-account/<%= user.client_id %>" method="post" enctype="multipart/form-data">
+                <div id="form">
+                    <!-- <form action="/edit-account/<%= user.client_id %>" method="post" enctype="multipart/form-data">
                         <label for="">Full Name</label>
-                        <input type="text" name="fullname" id="" value="">
+                        <input type="text" name="fullname" id="" value="<%= user.fullname %>">
                         <label for="">Email Address</label>
-                        <input type="email" name="email" id="" value="">
+                        <input type="email" name="email" id="" value="<%= user.email %>">
                         <label for="">Phone number</label>
-                        <input type="text" name="phonenumber" value="">
+                        <input type="text" name="phonenumber" value="<%= user.phonenumber %>">
                         <label for="">Gender</label>
                         <select name="gender" id="">
                             <% if(user.gender !== null) { %>
@@ -30,7 +30,7 @@
                             <option value="Female">Female</option>
                         </select>
                         <label for="">Location</label>
-                        <input type="text" name="location" id="" value="">
+                        <input type="text" name="location" id="" value="<%= user.location %>">
                         <label for="">Profile Picture</label>
                         <input type="file" name="picture" id="">
                         <label for="">Password</label>
