@@ -2,26 +2,30 @@
     <%- include('partials/nav') %>
 
     <main class="container">
-        <h1>Veterinary Doctor Appointment App</h1>
+        
 
-        <form id="appointmentForm">
-            <label for="">Pet Name</label>
-            <input type="text" id="petName" required>
+        <div id="form">
+
+            <h1>Appointment Form</h1>
+            <form action="/dashboard/<%= user.client_id %>" id="appointmentForm" method="post">
+                <label for="">Pet Name</label>
+                <input type="text" id="" value="<%= user.pet_name %>" required>
+        
+                <label for="">Appointment Date</label>
+                <input type="date" id="" value="<%= user.appointment_date %>">
+        
+                <label for="">Appoinrment Time</label>
+                <input type="time" id="" value="<%= user.appointment_time %>">
     
-            <label for="">Owner Name</label>
-            <input type="text" id="ownerName" required>
-    
-            <label for="">Appointment Date</label>
-            <input type="date" id="appointmentDate" required>
-    
-            <label for="">Appoinrment Time</label>
-            <input type="time" id="appointmentTime" required>
-    
-            <button type="submit">Schedule Appointment</button>
-        </form>
-    
-        <div id="appointmentList">
-    
+                <label for="">Reason for visit</label>
+                <textarea name="reason" id="reason_for_visit" cols="30" rows="10"></textarea>
+        
+                <button type="submit">Schedule Appointment</button>
+            </form>
+        
+            <div id="appointmentList">
+        
+            </div>
         </div>
 
     </main>
