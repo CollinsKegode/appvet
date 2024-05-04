@@ -1,5 +1,29 @@
 <%- include('partials/header') %>
+    <%- include('partials/nav') %>
+
+    <!-- appointment.ejs -->
+    <main class="container">
+        <div id="form">
+            <h1>Appointment Form</h1>
+            <form action="/appointments" method="POST">
+                <label for="pet_name">Pet Name:</label>
+                <input type="text" id="pet_name" value="<%= appointments.pet_name %>" name="pet_name" required>
+        
+                <label for="appointment_date">Appointment Date:</label>
+                <input type="date" id="appointment_date" value="<%= appointments.appointment_date %>" name="appointment_date" required>
+
+                <label for="">Reason for visit</label>
+                <textarea name="reason" id="reason_for_visit" value="<%= appointments.reason_for_visit %>"></textarea>
+        
+                <button type="submit">Schedule Appointment</button>
+            </form>
+        </div>
+
+    </main>
+    
 
 
 
-<%- include('partials/footer') %>
+
+
+<%- include('partials/footer') %>   
