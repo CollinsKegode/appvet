@@ -1,0 +1,36 @@
+<%- include('partials/header') %>
+    <%- include('partials/nav') %>
+
+    <div class="container">
+        <h1>Appointments</h1>
+        <% if (appointments.length > 0) { %>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Pet Name</th>
+                        <th>Appointment Date</th>
+                        <th>Reason for Visit</th>
+                        <th>Action</th> <!-- New column for delete action -->
+                    </tr>
+                </thead>
+                <tbody>
+                    <% appointments.forEach(appointment => { %>
+                        <tr>
+                            <td><%= appointment.pet_name %></td>
+                            <td><%= appointment.appointment_date ? appointment.appointment_date.toISOString().substr(0, 10) : 'N/A' %></td>
+                            <td><%= appointment.reason_for_visit %></td>
+                            <td>
+                                <form action="/appointments/<%= appointment.id %>?_method=DELETE" method="POST">
+                                    <button type="submit">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        <% } else { %>
+            <p>No appointments found.</p>
+        <% } %>
+    </div>
+
+<%- include('partials/footer') %>
