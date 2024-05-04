@@ -179,48 +179,27 @@ app.get('/logout', (req, res) => {
 // Dahsboard
 app.get('/dashboard', (req, res) => {
     if (res.locals.isLoggedIn) {
-        let sql = 'SELECT * FROM clients WHERE client_id = ?'
-        connection.query(
-            sql,
-            [req.session.userID],
-            (error, results) => {
-                res.render('dashboard', {user: results[0], userID: req.session.userID, error: false})
-            }
-        )
+        // Fetch upcoming appointments from the database
+        const upcomingAppointments = []; // Implement logic to fetch upcoming appointments from the database
+
+        // Calculate appointment statistics (total appointments and appointments for the current week)
+        const totalAppointments = upcomingAppointments.length;
+        const currentWeekAppointments = upcomingAppointments.filter(appointment => {
+            const appointment_date = new Date(appointment.appointment_date);
+            const today = new Date();
+            const startOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
+            const endOfWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 6);
+            return appointment_date >= startOfWeek && appointment_date <= endOfWeek;
+        }).length;
+
+        // Render the dashboard view with data
+        res.render('dashboard', {
+            upcomingAppointments,
+            totalAppointments,
+            currentWeekAppointments
+        });
     } else {
         res.redirect('/login')
-    }
-})
-
-// Post dashboard form
-app.post('/dashboard', (req, res) => {
-
-    const user = {
-        username: req.body.username,
-        email: req.body.email,
-    }
-    if (res.locals.isLoggedIn) {
-        let sql = 'INSERT INTO apppointments (appointment_date, appointment_time, pet_name, reason_for_visit) VALUES (?,?,?)'
-        connection.query(
-            sql,
-            [user.username, user.email],
-            (error, results) => {
-                res.redirect('/dashboard')
-            }
-        )
-    } else {
-        let sql = 'SELECT * FROM clients WHERE email =?'
-        connection.query(
-            sql,
-            [user.email],
-            (error, results) => {
-                if (results > 0) {
-                    
-                } else {
-                    
-                }
-            }
-        )
     }
 })
 
@@ -317,6 +296,65 @@ app.post('/edit-account/:id', upload.single('picture'), (req, res) => {
         }
     )
 })
+
+// Handle GET request to display the appointment form
+app.get('/appointment', (req, res) => {
+    const appointments = []
+    res.render('appointment',  { appointments: appointments });
+});
+
+// Handle GET request to retrieve existing appointments
+app.get('/appointments', (req, res) => {
+    const sql = 'SELECT * FROM appointments';
+
+    connection.query(sql, (err, results) => {
+        if (err) {
+            console.error('Error fetching appointments from database: ', err);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+        res.render('appointments', { appointments: results });
+    });
+});
+
+
+// Handle POST request to create a new appointment
+app.post('/appointments/:id', (req, res) => {
+    const appointmentId = req.params.id
+    const { pet_name, appointment_date, reason_for_visit } = req.body;
+    const sql = 'INSERT INTO appointments (pet_name, appointment_date, reason_for_visit ) VALUES (?, ?, ?)';
+    const values = [pet_name, appointment_date, reason_for_visit];
+    
+
+    connection.query(sql, values, (err, result) => {
+        if (err) {
+            console.error('Error inserting appointment into database: ', err);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+        console.log('New appointment added to database');
+        res.redirect('/appointments'); // Redirect to another page after saving
+    });
+});
+
+// Handle DELETE request to delete an appointment
+app.post('/appointments/:id', (req, res) => {
+    const appointmentId = req.params.id;
+
+    // Delete the appointment from the database
+    const sql = 'DELETE FROM appointments WHERE id = ?';
+    connection.query(sql, [appointmentId], (err, result) => {
+        if (err) {
+            console.error('Error deleting appointment:', err);
+            res.status(500).send('Internal Server Error');
+            return;
+        }
+        console.log('Appointment deleted successfully');
+        res.redirect('/appointments');
+    });
+});
+
+
 
 app.listen(5000, () => {
     console.log('app is running...');
