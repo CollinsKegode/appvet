@@ -2,78 +2,31 @@
     <%- include('partials/nav') %>
 
     <main class="container">
-        
 
-        <div id="form">
-
-            <h1>Appointment Form</h1>
-            <form action="/dashboard/<%= user.client_id %>" id="appointmentForm" method="post">
-                <label for="">Pet Name</label>
-                <input type="text" id="" value="<%= user.pet_name %>" required>
-        
-                <label for="">Appointment Date</label>
-                <input type="date" id="" value="<%= user.appointment_date %>">
-        
-                <label for="">Appoinrment Time</label>
-                <input type="time" id="" value="<%= user.appointment_time %>">
+        <h1>Welcome to the Dashboard, <%= locals.username %></h1>
     
-                <label for="">Reason for visit</label>
-                <textarea name="reason" id="reason_for_visit" cols="30" rows="10"></textarea>
+        <!-- Upcoming Appointments -->
+        <h2>Upcoming Appointments</h2>
+        <% if (upcomingAppointments.length > 0) { %>
+            <ul>
+                <% upcomingAppointments.forEach(appointment => { %>
+                    <li><%= appointment.pet_name %> - <%= appointment.appointment_date %> (<%= appointment.reason_for_visit %>)</li>
+                <% }); %>
+            </ul>
+        <% } else { %>
+            <p>No upcoming appointments</p>
+        <% } %>
         
-                <button type="submit">Schedule Appointment</button>
-            </form>
+        <!-- Appointment Statistics -->
+        <h2>Appointment Statistics</h2>
+        <p>Total Appointments: <%= totalAppointments %></p>
+        <p>Appointments This Week: <%= currentWeekAppointments %></p>
         
-            <div id="appointmentList">
-        
-            </div>
-        </div>
-
-    </main>
-
-    <script>
-        let appointmentForm = document.querySelector('#appointmentForm')
-        let appointmentList = document.querySelector('#appointmentList')
-
-        appointmentForm.addEventListener('submit', (e) => {
-
-            const petName = document.querySelector('#petName').value
-            const ownerName = document.querySelector('#ownerName').value
-            const appointmentDate = document.querySelector('#appointnmentDate').value
-            const appointmentTime = document.querySelector('#appintmentTime').value
-
-            const appointment = {
-                petName,
-                ownerName,
-                appointmentDate,
-                appointmentTime
-            }
-
-            displayAppointment(appointment)
-            clearForm()
-        })
-
-        function displayAppointment(appointment) {
-            const appointmentItem = document.createElement('div')
-            appointmentItem.classList.add('appoinrment-item')
-
-            appointmentItem.innerHTML = `
-                <h3>${appointment.petName}</h3>
-                <p><strong></strong>${appointment.ownerName}</p>
-                <p><strong></strong>${appointment.appointmentDate}</p>
-                <p><strong></strong>${appointment.appointmentTime}</p>
-            `  
-            appointmentList.appendChild(appointmentItem)
-        }
-
-        function clearForm() {
-            document.querySelector('#petName')
-            document.querySelector('#ownerName')
-            document.querySelector('#appointmentDate')
-            document.querySelector('#appointmentTime')
-        }
-
-        
-    </script>
-    
+        <!-- Quick Actions -->
+        <h2>Quick Actions</h2>
+        <ul>
+            <li><a href="/appointment">Schedule New Appointment</a></li>
+            <li><a href="/appointments">View All Appointments</a></li>
+        </ul>
 
 <%- include('partials/footer') %>
